@@ -1,4 +1,5 @@
 import Header from './Header';
+import Register from './Register'
 import Main from './Main';
 import Footer from './Footer';
 import AddPlacePopup from './AddPlacePopup';
@@ -9,7 +10,7 @@ import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 function App() {
 
@@ -147,8 +148,18 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
         <Header />
-        <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick} isLoading={isLoading} cards={cards} onCardLike={handleCardLike} onCardDelete={handleConfirmDeletion} />
+        <Switch>
+          <Route exact path="/react-mesto-auth">
+            <Register />
+          </Route>
+          <Route path="/react-mesto-auth/sign-up">
+            <Register />
+          </Route>
+          <Route path="/react-mesto-auth/main">
+            <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick} isLoading={isLoading} cards={cards} onCardLike={handleCardLike} onCardDelete={handleConfirmDeletion} />
+          </Route>
+        </Switch>
         <Footer />
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
