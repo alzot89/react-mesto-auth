@@ -8,7 +8,8 @@ import ImagePopup from './ImagePopup';
 import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
-import { CurrentUserContext } from '../contexts/CurrentUserContext'
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { Route } from 'react-router-dom';
 
 function App() {
 
