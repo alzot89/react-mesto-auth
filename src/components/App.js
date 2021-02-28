@@ -10,7 +10,7 @@ import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
 import Login from './Login'
 
@@ -152,14 +152,14 @@ function App() {
       <div className="app">
         <Header />
         <Switch>
-          <Route path="/react-mesto-auth/sign-up">
+          <Route path="/sign-up">
             <Register />
           </Route >
-          <Route path="/react-mesto-auth/sign-in">
+          <Route path="/sign-in">
             <Login />
           </Route >
           <ProtectedRoute
-            path="/react-mesto-auth/"
+            path="/"
             loggedIn={loggedIn}
             component={Main}
             onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
