@@ -1,9 +1,15 @@
 .register__enter {
     width: 100%;
     text-align: center;
-    margin: 15 0 0;
+    margin: 15px 0 0;
     font-weight: 400;
     font-size: 14px;
     line-height: 1.2;
     color: #fff;
+}
+
+@media screen and (max-width: 620px) {
+    .register__enter {
+    margin: 20px 0 0;
+}
 }

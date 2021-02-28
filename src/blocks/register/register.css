@@ -5,3 +5,10 @@
     flex-direction: column;
     justify-content: center;
 }
+
+@media screen and (max-width: 620px) {
+    .register {
+        width: calc(100% - 30px * 2);
+        margin: 40px auto 0;
+}
+}
