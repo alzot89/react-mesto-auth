@@ -10,7 +10,8 @@ import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
   });
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -149,16 +151,19 @@ function App() {
       <div className="app">
         <Header />
         <Switch>
-          <Route exact path="/react-mesto-auth">
-            <Register />
-          </Route>
           <Route path="/react-mesto-auth/sign-up">
             <Register />
-          </Route>
-          <Route path="/react-mesto-auth/main">
-            <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick} isLoading={isLoading} cards={cards} onCardLike={handleCardLike} onCardDelete={handleConfirmDeletion} />
-          </Route>
+          </Route >
+          <Route path="/react-mesto-auth/sign-in">
+            <Register />
+          </Route >
+          <ProtectedRoute
+            path="/react-mesto-auth/"
+            loggedIn={loggedIn}
+            component={Main}
+            onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick} isLoading={isLoading} cards={cards} onCardLike={handleCardLike} onCardDelete={handleConfirmDeletion}
+          />
         </Switch>
         <Footer />
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
@@ -167,7 +172,7 @@ function App() {
         <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={closeAllPopups} onConfirmDeletion={handleCardDelete} />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
       </div >
-    </CurrentUserContext.Provider>
+    </CurrentUserContext.Provider >
   );
 }
 
