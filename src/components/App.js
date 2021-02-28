@@ -12,6 +12,7 @@ import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
+import Login from './Login'
 
 function App() {
 
@@ -155,7 +156,7 @@ function App() {
             <Register />
           </Route >
           <Route path="/react-mesto-auth/sign-in">
-            <Register />
+            <Login />
           </Route >
           <ProtectedRoute
             path="/react-mesto-auth/"
