@@ -48,12 +48,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
 
     function handleInputChange(e) {
         const name = e.target.name;
-        setInputValue((prevValue) => {
-            return {
-                ...prevValue,
-                [name]: e.target.value
-            }
-        })
+        setInputValue((prevValue) => ({
+            ...prevValue,
+            [name]: e.target.value
+        }))
         setError((prevValue) => {
             return {
                 ...prevValue,

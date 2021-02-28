@@ -10,7 +10,7 @@ import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
 import Login from './Login'
 
@@ -30,6 +30,7 @@ function App() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     setIsLoading(true);
@@ -153,7 +154,7 @@ function App() {
         <Header />
         <Switch>
           <Route path="/sign-up">
-            <Register />
+            <Register history={history} />
           </Route >
           <Route path="/sign-in">
             <Login />
