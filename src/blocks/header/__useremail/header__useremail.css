@@ -5,10 +5,3 @@
     color: #fff;
     margin: 0 24px 0 0;
 }
-
-@media screen and (max-width: 620px) {
-    .header__useremail {
-        font-size: 14px;
-        line-height: 2;
-    }
-}

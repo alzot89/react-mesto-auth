@@ -12,7 +12,7 @@ import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
@@ -34,9 +34,38 @@ function App() {
   const [email, setEmail] = useState('')
   const history = useHistory();
 
-  function handleLogin(e) {
-    e.preventDefault();
-    setLoggedIn(true)
+  function handleRegister(credential) {
+    Auth.register(credential)
+      .then((res) => {
+        if (res) {
+          history.push('/sign-in')
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function handleLogin(credential) {
+    if (!credential.email || !credential.password) {
+      return
+    }
+    Auth.authorize(credential)
+      .then((data) => {
+        if (data.token) {
+          setLoggedIn(true)
+          setEmail(credential.email)
+        }
+      })
+      .then(() => {
+        history.push('/');
+      })
+      .catch(err => console.log(err));
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    history.push('/sign-in');
+    setEmail('');
   }
 
   useEffect(() => {
@@ -49,9 +78,8 @@ function App() {
             if (res) {
               setLoggedIn(true);
             }
-            setEmail(res.data.email)
           })
-          .then(() => { history.push('/main') })
+          .then(() => { history.push('/') })
           .catch((err) => { console.log(err) })
       }
     }
@@ -176,24 +204,21 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
-        <Header email={email} />
+        <Header email={email} onSignOut={handleLogout} />
         <Switch>
           <Route path="/sign-up">
-            <Register history={history} />
+            <Register onRegister={handleRegister} />
           </Route >
           <Route path="/sign-in">
-            <Login handleLogin={handleLogin} history={history} />
+            <Login onLogin={handleLogin} history={history} />
           </Route >
           <ProtectedRoute
-            path="/main"
+            path="/"
             loggedIn={loggedIn}
             component={Main}
             onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
             onCardClick={handleCardClick} isLoading={isLoading} cards={cards} onCardLike={handleCardLike} onCardDelete={handleConfirmDeletion}
           />
-          <Route>
-            {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
-          </Route>
         </Switch>
         <Footer />
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />

@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import * as Auth from './Auth';
 
-function Login({ history, handleLogin }) {
+function Login({ onLogin }) {
 
     const initialCredential = { email: '', password: '' }
 
@@ -17,25 +16,8 @@ function Login({ history, handleLogin }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        if (!credential.email || !credential.password) {
-            return
-        }
-        Auth.authorize(credential)
-            .then((data) => {
-                if (data.token) {
-                    setCredential(
-                        (prevValue) => ({
-                            ...prevValue,
-                            email: '',
-                            password: ''
-                        }));
-                }
-                handleLogin();
-            })
-            .then(() => {
-                history.push('/main');
-            })
-            .catch(err => console.log(err));
+        onLogin(credential);
+        setCredential(initialCredential);
     }
 
     return (

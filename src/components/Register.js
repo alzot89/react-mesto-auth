@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import * as Auth from './Auth';
 
-function Register({ history }) {
+function Register({ onRegister }) {
 
     const initialCredential = { email: '', password: '' }
-
     const [credential, setCredential] = useState(initialCredential)
 
     function handleChange(e) {
@@ -17,13 +15,9 @@ function Register({ history }) {
     }
 
     function handleSubmit(e) {
-        e.preventDefault()
-        Auth.register(credential).then((res) => {
-            if (res) {
-                history.push('/sign-in')
-            }
-        })
-
+        e.preventDefault();
+        onRegister(credential);
+        setCredential(initialCredential);
     }
 
     return (
