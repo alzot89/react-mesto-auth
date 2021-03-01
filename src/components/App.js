@@ -31,6 +31,7 @@ function App() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [email, setEmail] = useState('')
   const history = useHistory();
 
   function handleLogin(e) {
@@ -48,6 +49,7 @@ function App() {
             if (res) {
               setLoggedIn(true);
             }
+            setEmail(res.data.email)
           })
           .then(() => { history.push('/main') })
           .catch((err) => { console.log(err) })
@@ -174,7 +176,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
-        <Header />
+        <Header email={email} />
         <Switch>
           <Route path="/sign-up">
             <Register history={history} />

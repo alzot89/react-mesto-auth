@@ -1,0 +1,9 @@
+.header__navbar {
+    display: flex;
+}
+
+@media screen and (max-width: 500px) {
+    .header__navbar {
+        display: none;
+    }
+}

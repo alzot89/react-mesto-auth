@@ -1,7 +1,14 @@
 import logoPath from '../images/header_logo.svg';
 import { Link, Route } from 'react-router-dom';
+import { useState } from 'react'
 
-function Header() {
+function Header({ email }) {
+
+    const [isActive, setIsActive] = useState(false);
+
+    function showNavBar() {
+        setIsActive(true)
+    }
 
     return (
         <header className="header">
@@ -13,7 +20,11 @@ function Header() {
                 <Link className="header__link" to="/sign-in">Вход</Link>
             </Route>
             <Route path="/main">
-                <Link className="header__link" to="/sign-in">Выход</Link>
+                <button className="header__burger" onClick={showNavBar}></button>
+                <div className={`header__navbar ${isActive && 'header__navbar_active'}`}>
+                    <p className="header__useremail">{email}</p>
+                    <Link className="header__link" to="/sign-in">Выйти</Link>
+                </div>
             </Route>
         </header>
     )
