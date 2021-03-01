@@ -1,5 +1,7 @@
 import Header from './Header';
-import Register from './Register'
+import Register from './Register';
+import Login from './Login';
+import * as Auth from './Auth';
 import Main from './Main';
 import Footer from './Footer';
 import AddPlacePopup from './AddPlacePopup';
@@ -10,9 +12,8 @@ import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import ProtectedRoute from "./ProtectedRoute";
-import Login from './Login'
 
 function App() {
 
@@ -31,6 +32,28 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const history = useHistory();
+
+  function handleLogin(e) {
+    e.preventDefault();
+    setLoggedIn(true)
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+
+      if (jwt) {
+        Auth.checkToken(jwt)
+          .then((res) => {
+            if (res) {
+              setLoggedIn(true);
+            }
+          })
+          .then(() => { history.push('/main') })
+          .catch((err) => { console.log(err) })
+      }
+    }
+  }, [])
 
   useEffect(() => {
     setIsLoading(true);
@@ -157,15 +180,18 @@ function App() {
             <Register history={history} />
           </Route >
           <Route path="/sign-in">
-            <Login />
+            <Login handleLogin={handleLogin} history={history} />
           </Route >
           <ProtectedRoute
-            path="/"
+            path="/main"
             loggedIn={loggedIn}
             component={Main}
             onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick}
             onCardClick={handleCardClick} isLoading={isLoading} cards={cards} onCardLike={handleCardLike} onCardDelete={handleConfirmDeletion}
           />
+          <Route>
+            {loggedIn ? <Redirect to="/main" /> : <Redirect to="/sign-in" />}
+          </Route>
         </Switch>
         <Footer />
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} isLoading={isLoading} />
