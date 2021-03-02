@@ -1,0 +1,16 @@
+
+.popup__close_type_indicator {
+    width: 40px;
+    height: 40px;
+    top: -35px;
+    right: -35px;
+}
+
+@media screen and (max-width: 620px) {
+    .popup__close_type_indicator {
+        width: 30px;
+        height: 30px;
+        top: -45px;
+        right: 125px;
+}
+}

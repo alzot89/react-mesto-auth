@@ -1,0 +1,15 @@
+.popup__container_type_indicator {
+    width: 430px;
+    height: 330px;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 36px;
+}
+
+@media screen and (max-width: 620px) {
+    .popup__container_type_indicator {
+        width: 280px;
+        height: 308px;
+        padding: 50px 18px;
+}
+}

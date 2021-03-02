@@ -1,20 +1,18 @@
 export const BASE_URL = 'https://auth.nomoreparties.co';
 
-export const register = ({ email, password }) => {
+export const register = (credential) => {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify(credential)
     })
-        .then((response) => {
-            try {
-                if (response.status === 201) {
-                    return response.json();
-                }
-            } catch (e) {
-                return (e)
+        .then((res) => {
+            if (res.status === 201) {
+                return res.json()
+            } else {
+                throw new Error(`Ошибка: ${res.status} ${res.statusText} `)
             }
         })
         .then((res) => {
@@ -30,7 +28,13 @@ export const authorize = (credential) => {
         },
         body: JSON.stringify(credential)
     })
-        .then((res => res.json()))
+        .then((res) => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                throw new Error(`Ошибка: ${res.status} ${res.statusText} `)
+            }
+        })
         .then((data) => {
             if (data.token) {
                 localStorage.setItem('jwt', data.token);
@@ -47,6 +51,12 @@ export const checkToken = (token) => {
             'Authorization': `Bearer ${token}`,
         }
     })
-        .then(res => res.json())
+        .then((res) => {
+            if (res.status === 200) {
+                return res.json()
+            } else {
+                throw new Error(`Ошибка: ${res.status} ${res.statusText}`)
+            }
+        })
         .then(data => data)
 }

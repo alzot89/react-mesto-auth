@@ -2,12 +2,15 @@ import Header from './Header';
 import Register from './Register';
 import Login from './Login';
 import * as Auth from './Auth';
+import okPath from '../images/OK.svg';
+import nokPath from '../images/NOK.svg';
 import Main from './Main';
 import Footer from './Footer';
 import AddPlacePopup from './AddPlacePopup';
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import ImagePopup from './ImagePopup';
+import InfoTooltip from './InfoTooltip';
 import ConfirmPopup from './ConfirmPopup';
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
@@ -20,6 +23,8 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isOkPopupOpen, setOkPopupOpen] = useState(false);
+  const [isNokPopupOpen, setNokPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
@@ -31,17 +36,20 @@ function App() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('');
   const history = useHistory();
 
   function handleRegister(credential) {
     Auth.register(credential)
       .then((res) => {
         if (res) {
-          history.push('/sign-in')
+          setOkPopupOpen(true)
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setNokPopupOpen(true);
+      })
   }
 
   function handleLogin(credential) {
@@ -51,14 +59,14 @@ function App() {
     Auth.authorize(credential)
       .then((data) => {
         if (data.token) {
-          setLoggedIn(true)
-          setEmail(credential.email)
+          setEmail(credential.email);
+          setLoggedIn(true);
         }
       })
-      .then(() => {
-        history.push('/');
-      })
-      .catch(err => console.log(err));
+      .then(() => { history.push('/') })
+      .catch((err) => {
+        console.log(err)
+      });
   }
 
   function handleLogout() {
@@ -68,6 +76,16 @@ function App() {
     setEmail('');
   }
 
+  function closeOkPopup() {
+    setOkPopupOpen(false);
+    history.push('/sign-in')
+  }
+
+  function closeNokPopup() {
+    setNokPopupOpen(false);
+  }
+
+  // eslint-disable-next-line
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
@@ -77,6 +95,7 @@ function App() {
           .then((res) => {
             if (res) {
               setLoggedIn(true);
+              setEmail(res.data.email);
             }
           })
           .then(() => { history.push('/') })
@@ -198,7 +217,7 @@ function App() {
     setEditAvatarPopupOpen(false);
     setSelectedCard({});
     setImagePopupOpen(false);
-    setConfirmPopupOpen(false)
+    setConfirmPopupOpen(false);
   }
 
   return (
@@ -225,7 +244,9 @@ function App() {
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} isLoading={isLoading} />
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
         <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={closeAllPopups} onConfirmDeletion={handleCardDelete} />
-        <ImagePopup card={selectedCard} onClose={closeAllPopups} isOpen={isImagePopupOpen} />
+        <ImagePopup isOpen={isImagePopupOpen} onClose={closeAllPopups} card={selectedCard} />
+        <InfoTooltip isOpen={isOkPopupOpen} onClose={closeOkPopup} imgPath={okPath} message='Вы успешно зарегистрировались!' />
+        <InfoTooltip isOpen={isNokPopupOpen} onClose={closeNokPopup} imgPath={nokPath} message='Что-то пошло не так! Попробуйте еще раз' />
       </div >
     </CurrentUserContext.Provider >
   );
