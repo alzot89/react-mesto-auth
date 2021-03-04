@@ -40,11 +40,11 @@ function Login({ onLogin }) {
             <h2 className="login__title">Вход</h2>
             <form className="popup__form popup__form_type_login" name="login" onSubmit={handleSubmit} >
                 <div className="popup__input-container">
-                    <input id="name-input" className={`popup__input popup__input_type_email ${!validity.email && 'popup__input_state_invalid'} `} type="email" name="email" value={credential.email} placeholder="Email" required onChange={handleChange} />
+                    <input id="email-input" className={`popup__input popup__input_type_email ${!validity.email && 'popup__input_state_invalid'} `} type="email" name="email" value={credential.email} placeholder="Email" required onChange={handleChange} />
                     <span id="email-input-error" className="error">{error.email}</span>
                 </div>
                 <div className="popup__input-container">
-                    <input id="about-input" className={`popup__input popup__input_type_password ${!validity.password && 'popup__input_state_invalid'} `} type="password" name="password" value={credential.password} placeholder="Пароль" required onChange={handleChange} />
+                    <input id="password-input" className={`popup__input popup__input_type_password ${!validity.password && 'popup__input_state_invalid'} `} type="password" minLength="2" name="password" value={credential.password} placeholder="Пароль" required onChange={handleChange} />
                     <span id="password-input-error" className="error">{error.password}</span>
                 </div>
                 <button className="button popup__save popup__save_type_login" >Войти</button>

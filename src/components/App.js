@@ -2,8 +2,6 @@ import Header from './Header';
 import Register from './Register';
 import Login from './Login';
 import * as Auth from './Auth';
-import okPath from '../images/OK.svg';
-import nokPath from '../images/NOK.svg';
 import Main from './Main';
 import Footer from './Footer';
 import AddPlacePopup from './AddPlacePopup';
@@ -23,8 +21,7 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [isOkPopupOpen, setOkPopupOpen] = useState(false);
-  const [isNokPopupOpen, setNokPopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
   const [isConfirmPopupOpen, setConfirmPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
@@ -36,20 +33,25 @@ function App() {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [registered, setRegistered] = useState(false)
   const [email, setEmail] = useState('');
   const history = useHistory();
 
   function handleRegister(credential) {
+    setIsLoading(true)
     Auth.register(credential)
       .then((res) => {
         if (res) {
-          setOkPopupOpen(true)
+          setRegistered(true);
+          setInfoTooltipOpen(true);
         }
       })
       .catch((err) => {
         console.log(err);
-        setNokPopupOpen(true);
+        setRegistered(false)
+        setInfoTooltipOpen(true);
       })
+      .finally(() => setIsLoading(false))
   }
 
   function handleLogin(credential) {
@@ -76,14 +78,13 @@ function App() {
     setEmail('');
   }
 
-  function closeOkPopup() {
-    setOkPopupOpen(false);
-    history.push('/sign-in')
+  function closeInfoTooltip() {
+    setInfoTooltipOpen(false);
+    if (registered === true) {
+      history.push('/sign-in');
+    }
   }
 
-  function closeNokPopup() {
-    setNokPopupOpen(false);
-  }
 
   // eslint-disable-next-line
   useEffect(() => {
@@ -245,8 +246,7 @@ function App() {
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} isLoading={isLoading} />
         <ConfirmPopup isOpen={isConfirmPopupOpen} onClose={closeAllPopups} onConfirmDeletion={handleCardDelete} />
         <ImagePopup isOpen={isImagePopupOpen} onClose={closeAllPopups} card={selectedCard} />
-        <InfoTooltip isOpen={isOkPopupOpen} onClose={closeOkPopup} imgPath={okPath} message='Вы успешно зарегистрировались!' />
-        <InfoTooltip isOpen={isNokPopupOpen} onClose={closeNokPopup} imgPath={nokPath} message='Что-то пошло не так! Попробуйте еще раз' />
+        <InfoTooltip isOpen={isInfoTooltipOpen} onClose={closeInfoTooltip} registered={registered} isLoading={isLoading} />
       </div >
     </CurrentUserContext.Provider >
   );
