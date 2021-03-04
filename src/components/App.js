@@ -1,7 +1,7 @@
 import Header from './Header';
 import Register from './Register';
 import Login from './Login';
-import * as Auth from './Auth';
+import * as auth from '../utils/auth';
 import Main from './Main';
 import Footer from './Footer';
 import AddPlacePopup from './AddPlacePopup';
@@ -39,7 +39,7 @@ function App() {
 
   function handleRegister(credential) {
     setIsLoading(true)
-    Auth.register(credential)
+    auth.register(credential)
       .then((res) => {
         if (res) {
           setRegistered(true);
@@ -58,7 +58,7 @@ function App() {
     if (!credential.email || !credential.password) {
       return
     }
-    Auth.authorize(credential)
+    auth.authorize(credential)
       .then((data) => {
         if (data.token) {
           setEmail(credential.email);
@@ -92,7 +92,7 @@ function App() {
       const jwt = localStorage.getItem('jwt');
 
       if (jwt) {
-        Auth.checkToken(jwt)
+        auth.checkToken(jwt)
           .then((res) => {
             if (res) {
               setLoggedIn(true);

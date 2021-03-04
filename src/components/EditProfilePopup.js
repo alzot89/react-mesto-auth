@@ -21,11 +21,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
                 description: currentUser.about
             }))
             setError(initialValue)
-            setValidity((prevValue) => ({
-                ...prevValue,
+            setValidity({
                 name: true,
                 description: true
-            }))
+            })
         }
     }, [isOpen])
 
