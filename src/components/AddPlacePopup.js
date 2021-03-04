@@ -19,37 +19,29 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
         if (isOpen) {
             nameRef.current.value = '';
             linkRef.current.value = ''
-            setError((prevValue) => {
-                return {
-                    ...prevValue,
-                    name: '',
-                    link: ''
-                }
-            })
-            setValidity((prevValue) => {
-                return {
-                    ...prevValue,
-                    name: true,
-                    link: true
-                }
-            })
+            setError((prevValue) => ({
+                ...prevValue,
+                name: '',
+                link: ''
+            }))
+            setValidity((prevValue) => ({
+                ...prevValue,
+                name: true,
+                link: true
+            }))
         }
     }, [isOpen])
 
     function handleChange(e) {
         const name = e.target.name
-        setError((prevValue) => {
-            return {
-                ...prevValue,
-                [name]: e.target.validationMessage
-            }
-        })
-        setValidity((prevValue) => {
-            return {
-                ...prevValue,
-                [name]: e.target.validity.valid
-            }
-        })
+        setError((prevValue) => ({
+            ...prevValue,
+            [name]: e.target.validationMessage
+        }))
+        setValidity((prevValue) => ({
+            ...prevValue,
+            [name]: e.target.validity.valid
+        }))
     }
 
     return (

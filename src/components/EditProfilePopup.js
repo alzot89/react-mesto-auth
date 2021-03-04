@@ -3,38 +3,29 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
-    const currentUser = useContext(CurrentUserContext);
-    const [inputValue, setInputValue] = useState({
+    const initialValue = {
         name: '',
         description: ''
-    })
+    }
+    const currentUser = useContext(CurrentUserContext);
+    const [inputValue, setInputValue] = useState(initialValue)
     const [error, setError] = useState({});
     const [validity, setValidity] = useState({});
 
     // eslint-disable-next-line
     useEffect(() => {
         if (isOpen) {
-            setInputValue((prevValue) => {
-                return {
-                    ...prevValue,
-                    name: currentUser.name,
-                    description: currentUser.about
-                }
-            })
-            setError((prevValue) => {
-                return {
-                    ...prevValue,
-                    name: '',
-                    description: ''
-                }
-            })
-            setValidity((prevValue) => {
-                return {
-                    ...prevValue,
-                    name: true,
-                    description: true
-                }
-            })
+            setInputValue((prevValue) => ({
+                ...prevValue,
+                name: currentUser.name,
+                description: currentUser.about
+            }))
+            setError(initialValue)
+            setValidity((prevValue) => ({
+                ...prevValue,
+                name: true,
+                description: true
+            }))
         }
     }, [isOpen])
 
@@ -52,18 +43,14 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
             ...prevValue,
             [name]: e.target.value
         }))
-        setError((prevValue) => {
-            return {
-                ...prevValue,
-                [name]: e.target.validationMessage
-            }
-        })
-        setValidity((prevValue) => {
-            return {
-                ...prevValue,
-                [name]: e.target.validity.valid
-            }
-        })
+        setError((prevValue) => ({
+            ...prevValue,
+            [name]: e.target.validationMessage
+        }))
+        setValidity((prevValue) => ({
+            ...prevValue,
+            [name]: e.target.validity.valid
+        }))
     }
 
 

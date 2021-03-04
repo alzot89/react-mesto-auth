@@ -1,0 +1,10 @@
+.popup__input_type_email {
+    background-color: #000;
+    border-bottom: 2px solid rgba(204, 204, 204, 1);
+    color: #fff;
+    padding-bottom: 13px;
+}
+
+.popup__input_type_email::placeholder {
+    color: #ccc;
+}

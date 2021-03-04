@@ -3,14 +3,23 @@ import { useState } from 'react';
 function Login({ onLogin }) {
 
     const initialCredential = { email: '', password: '' }
-
-    const [credential, setCredential] = useState(initialCredential)
+    const [credential, setCredential] = useState(initialCredential);
+    const [validity, setValidity] = useState({ email: true, password: true });
+    const [error, setError] = useState(initialCredential);
 
     function handleChange(e) {
-        const { name, value } = e.target;
+        const name = e.target.name;
         setCredential((prevValue) => ({
             ...prevValue,
-            [name]: value
+            [name]: e.target.value
+        }));
+        setError((prevValue) => ({
+            ...prevValue,
+            [name]: e.target.validationMessage
+        }));
+        setValidity((prevValue) => ({
+            ...prevValue,
+            [name]: e.target.validity.valid
         }));
     }
 
@@ -18,15 +27,27 @@ function Login({ onLogin }) {
         e.preventDefault();
         onLogin(credential);
         setCredential(initialCredential);
+        setError(initialCredential);
+        setValidity((prevValue) => ({
+            ...prevValue,
+            email: true,
+            password: true
+        }))
     }
 
     return (
         <section className="login">
             <h2 className="login__title">Вход</h2>
-            <form className="login__form" onSubmit={handleSubmit}>
-                <input className="login__input login__input_type_email" type="email" value={credential.email} name="email" placeholder="Email" onChange={handleChange}></input>
-                <input className="login__input login__input_type_password" type="password" value={credential.password} name="password" placeholder="Пароль" onChange={handleChange}></input>
-                <button className="login__button">Войти</button>
+            <form className="popup__form popup__form_type_login" name="login" onSubmit={handleSubmit} >
+                <div className="popup__input-container">
+                    <input id="name-input" className={`popup__input popup__input_type_email ${!validity.email && 'popup__input_state_invalid'} `} type="email" name="email" value={credential.email} placeholder="Email" required onChange={handleChange} />
+                    <span id="email-input-error" className="error">{error.email}</span>
+                </div>
+                <div className="popup__input-container">
+                    <input id="about-input" className={`popup__input popup__input_type_password ${!validity.password && 'popup__input_state_invalid'} `} type="password" name="password" value={credential.password} placeholder="Пароль" required onChange={handleChange} />
+                    <span id="password-input-error" className="error">{error.password}</span>
+                </div>
+                <button className="button popup__save popup__save_type_login" >Войти</button>
             </form>
         </section>
     )
