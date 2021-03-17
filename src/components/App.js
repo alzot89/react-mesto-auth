@@ -85,8 +85,6 @@ function App() {
     }
   }
 
-
-  // eslint-disable-next-line
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
@@ -103,7 +101,7 @@ function App() {
           .catch((err) => { console.log(err) })
       }
     }
-  }, [])
+  }, [history])
 
   useEffect(() => {
     setIsLoading(true);
@@ -143,7 +141,6 @@ function App() {
         console.log(err)
       })
   }
-
 
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);

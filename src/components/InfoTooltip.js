@@ -22,7 +22,7 @@ function InfoTooltip({ isOpen, onClose, registered, isLoading }) {
                 document.removeEventListener('keydown', onKeypress)
             }
         }
-    }, [isOpen])
+    }, [isOpen, onClose])
 
     return (
         <div className={`popup ${isOpen && 'popup_opened'}`} onMouseDown={handleOverlayClose}>

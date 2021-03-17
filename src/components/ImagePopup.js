@@ -19,7 +19,7 @@ function ImagePopup({ card, isOpen, onClose }) {
                 document.removeEventListener('keydown', onKeypress)
             }
         }
-    }, [isOpen])
+    }, [isOpen, onClose])
 
     return (
         <div className={`popup popup_type_image ${isOpen && 'popup_opened'}`} onMouseDown={handleOverlayClose} >
@@ -33,4 +33,4 @@ function ImagePopup({ card, isOpen, onClose }) {
     )
 }
 
-export default ImagePopup 
+export default ImagePopup

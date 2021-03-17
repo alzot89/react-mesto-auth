@@ -9,7 +9,9 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
     }
     const [inputValue, setInputValue] = useState(initialValue)
     const [error, setError] = useState({});
-    const [validity, setValidity] = useState({})
+    const [validity, setValidity] = useState({});
+    const [isFormValid, setFormValid] = useState(false);
+
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -19,6 +21,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
         })
     }
 
+    // eslint-disable-next-line
     useEffect(() => {
         if (isOpen) {
             setInputValue(initialValue);
@@ -26,11 +29,13 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
             setValidity({
                 name: true,
                 link: true
-            })
+            });
+            setFormValid(false);
         }
-    }, [isOpen])
+    }, [isOpen, onClose])
 
     function handleChange(e) {
+        const input = e.target;
         const name = e.target.name
         setInputValue((prevValue) => ({
             ...prevValue,
@@ -44,10 +49,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
             ...prevValue,
             [name]: e.target.validity.valid
         }))
+        setFormValid(input.closest('form').checkValidity())
     }
 
     return (
-        <PopupWithForm name='add' title='Новое место' button={isLoading ? 'Создание...' : 'Создать'} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit}>
+        <PopupWithForm name='add' title='Новое место' button={isLoading ? 'Создание...' : 'Создать'} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} isFormValid={isFormValid}>
             <>
                 <div className="popup__input-container">
                     <input id="image-input" className={`popup__input popup__input_type_image ${!validity.name && 'popup__input_state_invalid'} `} type="text" name="name"

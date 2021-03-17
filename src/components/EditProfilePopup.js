@@ -11,6 +11,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
     const [inputValue, setInputValue] = useState(initialValue)
     const [error, setError] = useState({});
     const [validity, setValidity] = useState({});
+    const [isFormValid, setFormValid] = useState(true);
 
     // eslint-disable-next-line
     useEffect(() => {
@@ -24,9 +25,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
             setValidity({
                 name: true,
                 description: true
-            })
+            });
+            setFormValid(true)
         }
-    }, [isOpen])
+    }, [isOpen, onClose, currentUser])
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -37,6 +39,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
     }
 
     function handleInputChange(e) {
+        const input = e.target;
         const name = e.target.name;
         setInputValue((prevValue) => ({
             ...prevValue,
@@ -50,11 +53,12 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
             ...prevValue,
             [name]: e.target.validity.valid
         }))
+        setFormValid(input.closest('form').checkValidity())
     }
 
 
     return (
-        <PopupWithForm name='edit' title='Редактировать профиль' button={isLoading ? 'Сохранение...' : 'Сохранить'} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit}>
+        <PopupWithForm name='edit' title='Редактировать профиль' button={isLoading ? 'Сохранение...' : 'Сохранить'} isOpen={isOpen} onClose={onClose} onSubmit={handleSubmit} isFormValid={isFormValid}>
             <>
                 <div className="popup__input-container">
                     <input id="name-input" className={`popup__input popup__input_type_name ${!validity.name && 'popup__input_state_invalid'} `} type="text" maxLength="40"
