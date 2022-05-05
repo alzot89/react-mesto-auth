@@ -1,4 +1,4 @@
-# Mesto
+# **Mesto**
 
 Описание: Инстаграм на минималках. Создание карточек, удаление, лайки
 
@@ -7,3 +7,5 @@
 Стек: HTML5, CSS3, React, Node.js, Express, Mongoose, MongoDB;
 
 [Ссылка на проект](https://alzot89.github.io/react-mesto-auth/)
+
+Статус: завершен
